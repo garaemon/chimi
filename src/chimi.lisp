@@ -14,7 +14,16 @@
   (:use #:common-lisp)
   (:export #:defclass*
 	   #:while
-	   #:replace-list)
+	   #:replace-list #:replace-list-flat1
+	   #:debug-print-variable
+	   #:all-combination
+	   #:getenv
+	   #:flatten
+	   #:with-mutex #:make-thread #:make-mutex
+	   #:all #:any #:find-all #:difference-list
+	   #:local-time-string #:find-file-in-path
+	   #:get-keyword
+	   )
   (:documentation
    "chimi package provides some utilities efficient in common.
    ")
@@ -96,7 +105,6 @@
             (push d ret))
         ))
     (reverse ret)))
-
 
 (defmacro debug-print-variable (sym &optional (func-name nil))
   `(progn
@@ -192,15 +200,15 @@
          (cons (car a) (difference-list (cdr a) (cdr b))))))
 
 (defun local-time-string ()
-  "現在の年, 月, 日, 時刻を文字列として返す.
-   フォーマットはYYYY-MM-DD-hh-mm-ss."
+  "returns current year, month, date, time as a string.
+   format is YYYY-MM-DD-hh-mm-ss."
   (multiple-value-bind (sec min hour day mon year)
       (decode-universal-time (get-universal-time))
     (format nil "~2,'0D-~2,'0D-~2,'0D-~2,'0D-~2,'0D-~2,'0D" year mon day hour min sec)))
 
 (defun find-file-in-path (fname paths)
-  "fnameをpathsの中から探す.
-   pathsはpathnameまたはstringのリスト."
+  "find fname in paths.
+   paths is a list of pathname or string."
   (let ((fname-pathname (if (stringp fname) (pathname fname) fname))
         (paths-pathname (mapcar #'(lambda (p) (if (stringp p) (pathname p) p)) paths)))
     (dolist (p paths-pathname)
@@ -211,4 +219,3 @@
 
 (defun get-keyword (key args)
   (cadr (member key args)))
-
