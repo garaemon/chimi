@@ -22,8 +22,7 @@
 	   #:with-mutex #:make-thread #:make-mutex
 	   #:all #:any #:find-all #:difference-list
 	   #:local-time-string #:find-file-in-path
-	   #:get-keyword
-	   )
+	   #:get-keyword)
   (:documentation
    "chimi package provides some utilities efficient in common.
    ")
@@ -107,6 +106,10 @@
     (reverse ret)))
 
 (defmacro debug-print-variable (sym &optional (func-name nil))
+  "print symbol and it's value.
+
+  ;;; (defvar *hoge* 100)
+  ;;; (debug-print-variable *hoge*) -> \"*hoge* -> 100\""
   `(progn
      (if ',func-name
          (format t "~s -> ~s -- ~s --~%" ',sym ,sym ',func-name)
@@ -130,6 +133,9 @@
           lst :initial-value :nil))
 
 (defun getenv (str)
+  "returns environment variable's value as string.
+
+   ;;; (getenv \"HOME\") -> \"/path/to/your/home/directory\""
   (declare (type string str))
   #+sbcl
   (SB-POSIX:GETENV str))
@@ -140,6 +146,9 @@
   )
 
 (defun flatten (lst)
+  "flatten list.
+
+   ;;; (flatten '((1 2) (3 4))) -> (1 2 3 4)"
   (cond ((null lst)
          nil)
         ((atom lst)
