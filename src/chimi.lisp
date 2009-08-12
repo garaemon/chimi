@@ -13,6 +13,7 @@
 (defpackage :chimi
   (:use #:common-lisp)
   (:export #:defclass*
+	   #:symbol->keyword #:string->symbol
 	   #:while
 	   #:replace-list #:replace-list-flat1
 	   #:debug-print-variable
@@ -23,6 +24,7 @@
 	   #:all #:any #:find-all #:difference-list
 	   #:local-time-string #:find-file-in-path
 	   #:get-keyword
+	   #:null-output
 	   ;; log.lisp
 	   #:make-logger
 	   #:log-format)
@@ -131,8 +133,8 @@
                     (dolist (ta target)
                       (dolist (p prev)
                         (declare (type list p))
-                        (push (append p (list ta)) ret))
-                      )
+                        (push (append p (list ta)) ret)
+			))
                     ret)))
           lst :initial-value :nil))
 
@@ -195,7 +197,7 @@
 
 ;; find-all = remove-if-not??
 (defun find-all (proc list)
-  "retun"
+  "is this same to remove-if-not??"
   (declare (type list list))
   (cond ((null list)
          nil)
@@ -205,6 +207,9 @@
          (find-all proc (cdr list)))))
 
 (defun difference-list (a b)
+  "returns difference between a and b
+
+   ;;; (difference-list '(1 2 3) '(1 1 3)) -> '(2)"
   (cond ((null a)
          nil)
         ((equal (car a) (car b))
@@ -235,3 +240,13 @@
 
    ;;; (get-keyword :hoge '(:hoge 1 :fuga 2)) -> 1"
   (cadr (member key args)))
+
+(defmacro null-output (&rest args)
+  "the output of all sexp in null-output is redirect to /dev/null.
+   "
+  ;;*standard-output* *error-outuput*
+  (let ((f (gensym)))
+    `(with-open-file (,f "/dev/null" :direction :output :if-exists :append)
+       (let ((*standard-output* ,f)
+	     (*error-outuput* ,f))
+	 ,@args))))
