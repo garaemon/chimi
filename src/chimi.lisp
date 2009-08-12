@@ -22,9 +22,13 @@
 	   #:with-mutex #:make-thread #:make-mutex
 	   #:all #:any #:find-all #:difference-list
 	   #:local-time-string #:find-file-in-path
-	   #:get-keyword)
+	   #:get-keyword
+	   ;; log.lisp
+	   #:make-logger
+	   #:log-format)
   (:documentation
-   "chimi package provides some utilities efficient in common.
+   "chimi package provides the some utilities
+    efficient in common. 
    ")
   )
 
@@ -176,10 +180,8 @@
   (cond ((null list)
          t)
         ((funcall proc (car list))
-         ;;(cons (car list) (all proc (cdr list))))
          (all proc (cdr list)))
         (t
-         ;;(all proc (cdr list)))))
          nil)))
 
 (defun any (proc list)
@@ -191,7 +193,9 @@
         (t
          (any proc (cdr list)))))
 
+;; find-all = remove-if-not??
 (defun find-all (proc list)
+  "retun"
   (declare (type list list))
   (cond ((null list)
          nil)
@@ -227,4 +231,7 @@
             nil)))))
 
 (defun get-keyword (key args)
+  "returns 'key' 's value in args.
+
+   ;;; (get-keyword :hoge '(:hoge 1 :fuga 2)) -> 1"
   (cadr (member key args)))

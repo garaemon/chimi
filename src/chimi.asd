@@ -1,8 +1,7 @@
 (defsystem chimi
-    :name "chimi"
+    :version "0.0.0"
     :depends-on (log4cl)
-    :components (;;(:file "util")
-		 (:file "chimi")
-                 ;;(:file "log" :depends-on ("util"))
+    :components ((:file "chimi")
+		 (:file "log" :depends-on ("chimi"))
 		 ;;(:file "timer" :depends-on ("util"))
 		 ))

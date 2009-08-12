@@ -69,13 +69,15 @@ div#index.four-oh-four a {
 #main h1 {
     font-family: Helvetica;
     color: #2B332E;
-    border-bottom: 1px solid #FF0066;
+/* border-bottom: 1px solid #FF0066; */
+    border-bottom: 1px solid #6600FF;
 }
 
 #main h1 span {
   display: block;
   margin-top: -6px;
-  border-bottom: 1px solid #FF0066;
+/* border-bottom: 1px solid #FF0066; */
+  border-bottom: 1px solid #6600FF;
 }
 
 #main a {
@@ -126,8 +128,8 @@ div#index.four-oh-four a {
  */
 
 #sidebar {
-    font-family: Verdana;
-    float: right;
+    /*font-family: Verdana;*/
+    /*float: right;*/
     list-style: none;
     padding-left: 10px;
     text-align: right;
@@ -135,7 +137,7 @@ div#index.four-oh-four a {
 
 #sidebar li {
   text-align: left;
-  float: right;
+  /*float: right;*/
   clear: both;
 }
 
@@ -144,10 +146,10 @@ div#index.four-oh-four a {
 }
 
 #sidebar a {
-    width: 100px;
+    width: 150px;
     text-decoration: none;
     color: white;
-    background: black;
+    /*background: black;*/
     display: block;
     padding: 5px;
     margin: .8em 0 0;
