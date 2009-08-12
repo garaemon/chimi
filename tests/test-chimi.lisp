@@ -64,5 +64,5 @@
 	   symbol->keyword-test
 	   string->symbol-test
 	   get-keyword-test)
-
+(format t "~%")
 (sb-ext:quit)

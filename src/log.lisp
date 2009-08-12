@@ -67,4 +67,3 @@
     (if (not (member level levels))
         (error "unkown level ~A" level)))
   (log4cl::log-message (logger-of logger) level (apply #'format nil str args)))
-

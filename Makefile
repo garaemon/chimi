@@ -25,6 +25,7 @@ install-chimi-asd:
 
 clean:
 	$(RM) $(CHIMI_ASD_PATH) $(CHIMI_TARGET_DIR)
+	$(RM) src/*fasl
 
 test:
 #	$(LISP) --eval "(load \"$(PWD)/tests/test-chimi.lisp\")"
