@@ -25,6 +25,7 @@
 	   #:local-time-string #:find-file-in-path
 	   #:get-keyword
 	   #:null-output
+	   #:random-select
 	   ;; log.lisp
 	   #:make-logger
 	   #:log-format)
@@ -250,3 +251,11 @@
        (let ((*standard-output* ,f)
 	     (*error-outuput* ,f))
 	 ,@args))))
+
+(defun random-select (list)
+  "returns a element of list randomly"
+  (declare (type list list))
+  (let ((len (length list)))
+    (elt list (random len))))
+    
+  

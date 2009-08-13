@@ -54,6 +54,12 @@
   (assert-equal 200 (get-keyword :fuga '(:hoge 100 :fuga 200 :piyo 300)))
   (assert-equal 300 (get-keyword :piyo '(:hoge 100 :fuga 200 :piyo 300))))
 
+(define-test random-select-test
+  (dotimes (i 100)
+    (let ((list (list 1 2 3 4 5)))
+      (assert-true (member (random-select list) list))
+      )))
+
 ;; run
 (run-tests replace-list-test
 	   flatten-test
@@ -63,6 +69,8 @@
 	   difference-list-test
 	   symbol->keyword-test
 	   string->symbol-test
-	   get-keyword-test)
+	   get-keyword-test
+	   random-select-test)
+
 (format t "~%")
 (sb-ext:quit)
