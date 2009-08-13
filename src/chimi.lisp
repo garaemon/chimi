@@ -11,7 +11,7 @@
 		   (space 0)))
 
 (defpackage :chimi
-  (:use #:common-lisp)
+  (:use #:common-lisp #:sb-unix)
   (:export #:defclass*
 	   #:symbol->keyword #:string->symbol
 	   #:while
@@ -28,7 +28,10 @@
 	   #:random-select
 	   ;; log.lisp
 	   #:make-logger
-	   #:log-format)
+	   #:log-format
+	   ;; time.lisp
+	   #:make-mtimer #:start-mtimer #:stop-mtimer
+	   )
   (:documentation
    "chimi package provides the some utilities
     efficient in common. 

@@ -3,5 +3,5 @@
     :depends-on (log4cl)
     :components ((:file "chimi")
 		 (:file "log" :depends-on ("chimi"))
-		 ;;(:file "timer" :depends-on ("util"))
+		 (:file "time" :depends-on ("chimi"))
 		 ))
