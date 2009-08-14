@@ -26,11 +26,20 @@
 	   #:get-keyword
 	   #:null-output
 	   #:random-select
+	   #:list-rank
 	   ;; log.lisp
 	   #:make-logger
 	   #:log-format
 	   ;; time.lisp
 	   #:make-mtimer #:start-mtimer #:stop-mtimer
+	   #:bench
+	   ;; gnuplot.lisp
+	   #:open-gnuplot #:close-gnuplot
+	   #:plot-function #:plot-points
+	   #:set-graph-properties
+	   #:clear-gnuplot-datum
+	   #:one-data-plot
+	   #:save-plot-to-file
 	   )
   (:documentation
    "chimi package provides the some utilities
@@ -261,4 +270,13 @@
   (let ((len (length list)))
     (elt list (random len))))
     
-  
+(defun list-rank (lst)
+  "returns rank of lst.
+
+   ;;; (list-rank nil) -> 0
+   ;;; (list-rank '(1 2 3)) -> 1
+   ;;; (list-rank '((1 2 3))) -> 2"
+  (if (atom lst)
+      0
+      (1+ (list-rank (car lst)))))
+

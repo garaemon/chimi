@@ -38,3 +38,8 @@
 	 (* 1.0e-6 (- micro-sec (cdr prev-time))))
       )))
     
+(defmacro bench (times str sexp)
+  "eval sexp by 'times' times."
+  `(progn
+     (format t "~A benchmark ~A times~%" ,str ,times)
+     (eval (list 'time (list 'dotimes (list 'i ,times) ',sexp)))))
