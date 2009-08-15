@@ -150,6 +150,7 @@
   t)
 
 (defun clear-gnuplot-datum ()
+  "clear plot datum."
   (setf (data-of *gnuplot*) nil)
   *gnuplot*)
 
@@ -159,12 +160,14 @@
 		      &key
 		      (clear nil)
 		      &allow-other-keys)
+  "plot data interpritingly"
   (if clear (clear-gnuplot-datum))
   (push point (data-of *gnuplot*))
   (apply #'plot-points (data-of *gnuplot*) args)
   t)
 
 (defun save-plot-to-file (fname type)
+  "save gnuplot's view to a file."
   (format-to-gnuplot *gnuplot* "set terminal ~A~%" type)
   (format-to-gnuplot *gnuplot* "set output ~s~%" fname)
   (let ((last-command (last-command-of *gnuplot*)))
@@ -180,13 +183,18 @@
   fname)
 
 (defun save-plot-to-pdf (fname)
+  "save gnuplot's view to a pdf."
   (save-plot-to-file fname "pdf"))
 
 (defun save-plot-to-png (fname)
+  "save gnuplot's view to a png."
   (save-plot-to-file fname "png"))
 
 (defun save-plot-to-jpg (fname)
+  "save gnuplot's view to a jpg."
   (save-plot-to-file fname "jpg"))
 
 (defun save-plot-to-eps (fname)
+  "save gnuplot's view to a eps."
   (save-plot-to-file fname "eps"))
+

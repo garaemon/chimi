@@ -26,5 +26,3 @@
   (sample-read-obj)
   (sample-write-obj))
 
-  
-  
