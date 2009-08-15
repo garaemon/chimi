@@ -15,7 +15,8 @@
 (defclass* <gnuplot>
     ()
   ((stream nil)
-   (data nil))
+   (data nil)
+   (last-command nil))
   (:documentation
    "gnuplot's process stream class."))
 
@@ -52,6 +53,7 @@
 			     (yrange nil)
 			     (xlabel nil)
 			     (ylabel nil)
+			     (label nil)
 			     (xlogscale nil)
 			     (ylogscale nil)
 			     (grid nil)
@@ -64,6 +66,8 @@
       (format-to-gnuplot *gnuplot* "set xlabel ~s~%" xlabel))
   (if ylabel
       (format-to-gnuplot *gnuplot* "set ylabel ~s~%" ylabel))
+  (if label
+      (format-to-gnuplot *gnuplot* "set label ~s~%" label))
   (if grid
       (format-to-gnuplot *gnuplot* "set grid~%")
       (format-to-gnuplot *gnuplot* "unset grid~%"))
@@ -76,12 +80,17 @@
   t)
 
 (defun plot-function (func-str
+		      &rest args
 		      &key
 		      (dimension 2)
 		      (clear t)
 		      (title nil)
-		      (style nil))
+		      (style nil)
+		      &allow-other-keys)
   "plotting a fuction"
+  ;; set last-command
+  (setf (last-command-of *gnuplot*)
+	(append (list #'plot-function func-str) args))
   (cond ((= dimension 2)
          (format-to-gnuplot *gnuplot* (if clear "plot ~A " "replot ~A ") func-str))
         ((= dimension 3)
@@ -112,6 +121,9 @@
     (2 (format-to-gnuplot *gnuplot* "plot '-' "))
     (3 (format-to-gnuplot *gnuplot* "splot '-' "))
     (t (error "diemnsion must be 2 or 3.")))
+  ;; set last-command
+  (setf (last-command-of *gnuplot*)
+	(append (list #'plot-points points) args))
   (if titles
       (format-to-gnuplot *gnuplot* " title ~s " (pop titles)))
   (if title
@@ -155,10 +167,26 @@
 (defun save-plot-to-file (fname type)
   (format-to-gnuplot *gnuplot* "set terminal ~A~%" type)
   (format-to-gnuplot *gnuplot* "set output ~s~%" fname)
-  ;;(format-to-gnuplot *gnuplot* "replot~%")
-  (apply #'plot-points (data-of *gnuplot*) nil)
-  (format-to-gnuplot *gnuplot* "replot~%")
+  (let ((last-command (last-command-of *gnuplot*)))
+    (if last-command
+	(apply (car last-command) (cdr last-command))
+	(format-to-gnuplot *gnuplot* "replot~%")))
   (format-to-gnuplot *gnuplot* "set output~%")
   (format-to-gnuplot *gnuplot* "set terminal aqua~%")
-  (format-to-gnuplot *gnuplot* "replot~%")
-  )
+  (let ((last-command (last-command-of *gnuplot*)))
+    (if last-command
+	(apply (car last-command) (cdr last-command))
+	(format-to-gnuplot *gnuplot* "replot~%")))
+  fname)
+
+(defun save-plot-to-pdf (fname)
+  (save-plot-to-file fname "pdf"))
+
+(defun save-plot-to-png (fname)
+  (save-plot-to-file fname "png"))
+
+(defun save-plot-to-jpg (fname)
+  (save-plot-to-file fname "jpg"))
+
+(defun save-plot-to-eps (fname)
+  (save-plot-to-file fname "eps"))

@@ -40,6 +40,8 @@
 	   #:clear-gnuplot-datum
 	   #:one-data-plot
 	   #:save-plot-to-file
+	   #:save-plot-to-pdf #:save-plot-to-png
+	   #:save-plot-to-jpg #:save-plot-to-eps
 	   )
   (:documentation
    "chimi package provides the some utilities
