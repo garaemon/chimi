@@ -24,13 +24,14 @@
   "open gnuplot process. You have to call this function before plotting.
    If you doesn't have gnuplot in your PATH,
    you should set gnuplot path to the \"path\" parameter."
-  (setf *gnuplot*
-	(make-instance '<gnuplot>
-		       :stream (sb-ext:run-program path nil
-						   :input :stream
-						   :output :stream
-						   :wait nil
-						   :search t)))
+  (unless *gnuplot*
+    (setf *gnuplot*
+	  (make-instance '<gnuplot>
+			 :stream (sb-ext:run-program path nil
+						     :input :stream
+						     :output :stream
+						     :wait nil
+						     :search t))))
   (unless *gnuplot*
     (error "Cannot create ~A process" path))
   *gnuplot*)
