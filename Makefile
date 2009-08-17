@@ -23,10 +23,15 @@ install-chimi-src:
 install-chimi-asd:
 	$(LN) $(CHIMI_SRC_DIR)/chimi.asd $(CHIMI_ASD_PATH)
 
+install-log4cl:
+	wget $(LOG4CL_URL) -O /tmp/$(LOG4CL_TGZ)
+	$(LISP) --eval (progn (require :asdf-install) (asdf-install "/tmp/$(LOG4CL_TGZ)"))
+
 clean:
 	$(RM) $(CHIMI_ASD_PATH) $(CHIMI_TARGET_DIR)
 	$(RM) src/*fasl
 
 test:
-#	$(LISP) --eval "(load \"$(PWD)/tests/test-chimi.lisp\")"
 	$(LISP) $(LISP_OPTIONS) $(PWD)/tests/test-chimi.lisp 2>/dev/null
+www:
+
