@@ -100,21 +100,38 @@ $ make</code></pre>
               <h4> ploting function in 2d </h4>
               <pre><code>(open-gnuplot) ;; make gnuplot child process
 (plot-function "sin(x)")</code></pre>
-              <img width=400 src="./figs/sin-x.png" alt="sin x">
+              <img width=400 src="./figs/sin-x.png" alt="sin x" />
             </div> <!-- ploting function in 2d  -->
             <div>
               <h4> ploting some graphs and set titles </h4>
               <pre><code>(plot-function "sin(x)" :dimension 2 :title "A")
 (plot-function "cos(x)" :dimension 2 :clear nil :title "B")</code></pre>
+              <img width=400 src="./figs/sin-and-cos.png" alt="sin x and cos x" />
             </div> <!--  ploting some graphs and set titles  -->
             <div>
               <h4> plotting some points-sets </h4>
-              <pre><code>(plot-points '((0 1) (0.1 1.1) (0.3 1.3) (0.5 1.5)
-               (0 2) (0.1 2.1) (0.3 2.3) (0.5 2.5)))</code></pre>
+              <pre><code>(plot-points '(((0 1) (0.1 1.1) (0.3 1.3) (0.5 1.5))
+			((0 2) (0.1 2.1) (0.3 2.3) (0.5 2.5))))</code></pre>
+              <img width=400 src="./figs/points.png" alt="plotting points" />
             </div> <!--  plotting some points-sets  -->
             <div>
+              <h4> plotting points intepritingly </h4>
+              <pre><code>(clear-gnuplot-datum)
+(dotimes (i 100)
+  (one-data-plot (list (/ i 100.0)
+		       0
+		       (exp (/ i 100.0)))
+		 :dimension 3)
+  (one-data-plot (list 0
+		       (/ i 100.0)
+		       (exp (/ i 100.0)))
+		 :dimension 3)
+  )</code></pre>
+              <img width=400 src="./figs/3d-points.png" alt="plotting points" />
+            </div> <!--  plotting points intepritingly  -->
+            <div>
               <h4> save to an image </h4>
-              <pre><code>(save-plot-to-jpg "hoge.jpg")</code></pre>
+              <pre><code>(save-plot-to-png "hoge.png")</code></pre>
             </div> <!--  save to an image  -->
 	  </div>   <!-- using gnuplot -->
 	</div>     <!-- simple samples -->
