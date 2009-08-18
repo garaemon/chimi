@@ -172,13 +172,13 @@
   (format-to-gnuplot *gnuplot* "set terminal ~A~%" type)
   (format-to-gnuplot *gnuplot* "set output ~s~%" fname)
   (let ((last-command (last-command-of *gnuplot*)))
-    (if last-command
+    (if (eq (car last-command) #'plot-points)
 	(apply (car last-command) (cdr last-command))
 	(format-to-gnuplot *gnuplot* "replot~%")))
   (format-to-gnuplot *gnuplot* "set output~%")
   (format-to-gnuplot *gnuplot* "set terminal aqua~%")
   (let ((last-command (last-command-of *gnuplot*)))
-    (if last-command
+    (if (eq (car last-command) #'plot-points)
 	(apply (car last-command) (cdr last-command))
 	(format-to-gnuplot *gnuplot* "replot~%")))
   fname)

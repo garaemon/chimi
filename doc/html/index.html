@@ -12,51 +12,57 @@
   <body>
       <div id="wrap">
 	<h1>Chimi</h1>
+        <div> <!-- index  -->
+          <ul>
+            <li> <a href="#whatis"> What is Chimi? </a></li>
+            <li> <a href="#install"> Install Chimi </a>
+              <ul>
+                <li><a href="#packages"> Dependency Packages </a></li>
+                <li><a href="#setup"> Setup chimi </a></li>
+                <li><a href="#tar"> Chimi tar balls </a></li>
+              </ul>
+            </li>
+            <li><a href="#samples"> Simple Samples </a></li>
+          </ul>
+        </div> <!-- index -->
 	<div id="main" class="install">
-	  <h2>What is Chimi?</h2>
+	  <h2><a name="whatis"> What is Chimi? </a></h2>
 	  <p>ChimiはCommon Lispにおける, 雑多なユーティリティを
 	    提供するパッケージです.
 	  </p>
-	  <p>Chimiは
-	    <a href="http://garaemon.net/roll">ROLLプロジェクト</a>
-	    の一環として開発されました.
-	  </p>
-	  <p>
-	    Chimiは
-	    <a href="http://garaemon.net/roll">ROLL</a>
-	    を構成する他のほとんどのパッケージで利用されています.
-	  </p>
-	  <p>
-	    Chimiが提供するものは, 決して複雑なプログラムではありません.
-	    ですが, 有用なものでしょう.
-	  </p>
-	  <p>
-	    もしもあなたが
-	    <a href="http://garaemon.net/roll">ROLL</a>
-	    に興味をもったなら, まずChimiを理解するのが良いでしょう.
-	  </p>
+          <p>ChimiはgaraemonがいくつかのCLライブラリを開発する過程で,
+            共通につかっているちょっとした関数, マクロを集めたものです.
+          </p>
+          <p>Chimiは主に, CLOSにおけるクラス定義を簡潔にするためのインタフェイス,
+            時間測定のための諸関数, gnuplotへのインタフェイスから構成されます.
+          </p>
+          <p>また, ChimiはSBCLでのみ, 動作します.</p>
+          <p>何かご質問などがあれば, garaemon__at__garaemon.netまで.
+          </p>
 	</div> <!-- end of whatis -->
 	<div id="main" class="install">
-	  <h2> Install Chimi </h2>
-	  <h3> Dependency Packages </h3>
+	  <h2><a name="install"> Install Chimi </a></h2>
+	  <h3><a name="packages"> Dependency Packages </a></h3>
 	  <p>ChimiはいくつかのCommon Lispライブラリに依存しています.</p>
 	  <ul>
 	    <li><a href="log4cl">log4cl</a></li>
 	    <li><a href="lisp-unit">lisp-unit</a></li>
+            <li><a href="iterate">iterate</a></li>
 	  </ul>
-	  <h3> Setup chimi </h3>
+          <p>これらのライブラリを別途インストールしてください.</p>
+	  <h3><a name="setup">  Setup chimi </a></h3>
 	  <pre><code>$ tar xvzf chimi-x.x.x.tar.gz
 $ cd chimi
 $ make</code></pre>
-	  <h3> Chimi tar balls </h3>
+	  <h3><a name="tar"> Chimi tar balls </a></h3>
 	  <ul>
 	    <li>
-	      <a href="chimi-0.0.0.tar.gz">chimi-0.0.0.tar.gz</a>
+	      <a href="chimi-0.0.0.tar.gz">chimi-0.0.0.tar.gz (released at 2009/08/xx)</a>
 	    </li>
 	  </ul>
 	</div> <!-- end of install -->
 	<div id="main" class="install">
-	  <h2> simple samples </h2>
+	  <h2><a name="samples"> simple samples </a></h2>
 	  <div>
 	    <h3> using defclass* </h3>
 	    <pre><code>(require :chimi)
@@ -94,6 +100,7 @@ $ make</code></pre>
               <h4> ploting function in 2d </h4>
               <pre><code>(open-gnuplot) ;; make gnuplot child process
 (plot-function "sin(x)")</code></pre>
+              <img width=400 src="./figs/sin-x.png" alt="sin x">
             </div> <!-- ploting function in 2d  -->
             <div>
               <h4> ploting some graphs and set titles </h4>

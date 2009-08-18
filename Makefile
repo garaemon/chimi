@@ -33,5 +33,7 @@ clean:
 
 test:
 	$(LISP) $(LISP_OPTIONS) $(PWD)/tests/test-chimi.lisp 2>/dev/null
+
 www:
+	$(SCP) doc/html/index.html garaemon.net:~/public_html/chimi/
 
