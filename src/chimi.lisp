@@ -138,6 +138,10 @@
      ))
 
 (defun all-combination (lst)
+  "make a list of all combination of lst
+
+  ;; (all-combination '((1) (2) (3))) -> ((1 2 3))
+  "
   (declare (type list lst))
   (reduce #'(lambda (prev target)
               (declare (type list target))
@@ -167,7 +171,7 @@
   )
 
 (defun flatten (lst)
-  "flatten list.
+  "flatten a list.
 
    ;;; (flatten '((1 2) (3 4))) -> (1 2 3 4)"
   (cond ((null lst)

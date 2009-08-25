@@ -31,8 +31,14 @@ clean:
 	$(RM) $(CHIMI_ASD_PATH) $(CHIMI_TARGET_DIR)
 	$(RM) src/*fasl
 
+clean-doc:
+	$(RM) -r doc/html/manual
+
 test:
 	$(LISP) $(LISP_OPTIONS) $(PWD)/tests/test-chimi.lisp 2>/dev/null
+
+gen-doc:
+	$(LISP) $(LISP_OPTIONS) $(PWD)/doc/gen-doc.lisp
 
 www:
 	$(SCP) doc/html/index.html garaemon.net:~/public_html/chimi/
