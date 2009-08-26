@@ -32,7 +32,6 @@
 	   #:log-format
 	   ;; time.lisp
 	   #:make-mtimer #:start-mtimer #:stop-mtimer
-	   #:bench
 	   ;; gnuplot.lisp
 	   #:open-gnuplot #:close-gnuplot
 	   #:plot-function #:plot-points

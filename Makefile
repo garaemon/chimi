@@ -2,6 +2,7 @@
 # Makefile for chimi
 ######################################
 
+VERSION          = 0.0.0
 LISP             = sbcl
 LISP_OPTIONS     = --noinform --load
 LISP_SYSTEM_DIR  = $(HOME)/.sbcl/systems
@@ -40,6 +41,17 @@ test:
 gen-doc:
 	$(LISP) $(LISP_OPTIONS) $(PWD)/doc/gen-doc.lisp
 
-www:
+www: tarball
 	$(SCP) doc/html/index.html garaemon.net:~/public_html/chimi/
+	$(SCP) chimi-$(VERSION).tar.gz garaemon.net:~/public_html/chimi/arichives
 
+tarball: clean clean-tarball
+	mkdir $(PWD)/chimi
+	cp -r Makefile INSTALL README samples tests doc src $(PWD)/chimi
+	tar cvzf chimi-$(VERSION).tar.gz $(PWD)/chimi
+	$(RM) -r $(PWD)/chimi
+
+clean-tarball:
+	$(RM) chimi-$(VERSION).tar.gz
+
+dist-clean: clean clean-doc clean-tarball
