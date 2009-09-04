@@ -27,6 +27,8 @@
 	   #:null-output
 	   #:random-select
 	   #:list-rank
+	   ;; terminal
+	   #:escape-string-with-color
 	   ;; log.lisp
 	   #:make-logger
 	   #:log-format
@@ -50,16 +52,36 @@
 
 (in-package #:chimi)
 
+(cl-interpol:enable-interpol-syntax)
+(defconstant +terminal-escape+ #?"\e[")
+(defconstant +terminal-escape-finish-char+ #\m)
+(defconstant +terminal-black+ "0;30")
+(defconstant +terminal-red+ "0;31")
+(defconstant +terminal-green+ "0;32")
+(defconstant +terminal-brown+ "0;33")
+(defconstant +terminal-blue+ "0;34")
+(defconstant +terminal-purple+ "0;35")
+(defconstant +terminal-cyan+ "0;36")
+(defconstant +terminal-light-gray+ "0;37")
+(defconstant +terminal-dark-gray+ "1;30")
+(defconstant +terminal-light-red+ "1;31")
+(defconstant +terminal-light-green+ "1;32")
+(defconstant +terminal-yellow+ "1;33")
+(defconstant +terminal-light-blue+ "1;34")
+(defconstant +terminal-light-purple+ "1;35")
+(defconstant +terminal-light-cyan+ "1;36")
+(defconstant +terminal-white+ "1;37")
+
 (defun symbol->keyword (sym)
   "convert a symbol to keyword.
-
+   this function is very slow, because it uses read-from-string.
   ;;; (symbol->keyword 'hoge) -> :hoge"
   (declare (type symbol sym))
   (read-from-string (concatenate 'string ":" (string sym))))
 
 (defun string->symbol (str)
   "convert string to symbol.
-
+   this function is very slow, because it uses read-from-string.
   ;;; (string->symbol \"hoge\") -> hoge"
   (declare (type string str))
   (read-from-string str))
@@ -97,7 +119,7 @@
 (defun replace-list (target from to &key (test #'equal))
   "replace 'from' in 'target' to 'to'
 
-  ;;; (REPLACE-LIST '(1 2 3 4 5) '(1 2 3) '(2 4 6)) -> (2 4 6 4 5)"
+  ;;; (replace-list '(1 2 3 4 5) '(1 2 3) '(2 4 6)) -> (2 4 6 4 5)"
   (declare (type list from to))
   (cond ((null target)
          nil)
@@ -285,3 +307,29 @@
       0
       (1+ (list-rank (car lst)))))
 
+(defun keyword->color-string (color-sym)
+  (case color-sym
+    (:black +terminal-black+)
+    (:red +terminal-red+)
+    (:green +terminal-green+)
+    (:brown +terminal-brown+)
+    (:blue +terminal-blue+)
+    (:purple +terminal-purple+)
+    (:cyan +terminal-cyan+)
+    (:light-gray +terminal-light-gray+)
+    (:dark-gray +terminal-dark-gray+)
+    (:light-red +terminal-light-red+)
+    (:light-green +terminal-light-green+)
+    (:yellow +terminal-yellow+)
+    (:light-blue +terminal-light-blue+)
+    (:light-purple +terminal-light-purple+)
+    (:light-cyan +terminal-light-cyan+)
+    (:white +terminal-white+)
+    ))
+
+(defun escape-string-with-color (str color)
+  (let ((color-str (keyword->color-string color)))
+    (format nil "~A~A~A~A~A~A"
+	    +terminal-escape+ color-str +terminal-escape-finish-char+
+	    str
+	    +terminal-escape+ +terminal-escape-finish-char+)))

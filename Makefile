@@ -20,7 +20,7 @@
 ######################################
 
 PACKAGE_NAME       = chimi
-VERSION            = 0.0.0
+VERSION            = 0.0.1
 TARBALL            = $(PACKAGE_NAME)-$(VERSION).tar.gz
 TARBALL_CONTENTS   = Makefile INSTALL README samples tests doc src
 LISP               = sbcl
