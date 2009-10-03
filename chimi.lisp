@@ -22,17 +22,24 @@
 	   #:flatten
 	   #:with-mutex #:make-thread #:make-mutex
 	   #:all #:any #:find-all #:difference-list
-	   #:local-time-string #:find-file-in-path
+	   #:concatenate-string-with
+	   #:find-file-in-path
 	   #:get-keyword
 	   #:null-output
 	   #:random-select
+	   #:read-from-file
 	   #:list-rank
 	   ;; terminal
 	   #:escape-string-with-color
 	   ;; log.lisp
 	   #:make-logger
 	   #:log-format
+	   #:stop-logger #:start-logger
+	   #:make-log-searcher
+	   #:update-datum
+	   #:datum-of
 	   ;; time.lisp
+	   #:local-time-string #:decompose-time-string
 	   #:make-mtimer #:start-mtimer #:stop-mtimer
 	   ;; gnuplot.lisp
 	   #:open-gnuplot #:close-gnuplot
@@ -42,8 +49,7 @@
 	   #:one-data-plot
 	   #:save-plot-to-file
 	   #:save-plot-to-pdf #:save-plot-to-png
-	   #:save-plot-to-jpg #:save-plot-to-eps
-	   )
+	   #:save-plot-to-jpg #:save-plot-to-eps)
   (:documentation
    "chimi package provides the some utilities
     efficient in common. 
@@ -53,24 +59,25 @@
 (in-package #:chimi)
 
 (cl-interpol:enable-interpol-syntax)
-(defconstant +terminal-escape+ #?"\e[")
-(defconstant +terminal-escape-finish-char+ #\m)
-(defconstant +terminal-black+ "0;30")
-(defconstant +terminal-red+ "0;31")
-(defconstant +terminal-green+ "0;32")
-(defconstant +terminal-brown+ "0;33")
-(defconstant +terminal-blue+ "0;34")
-(defconstant +terminal-purple+ "0;35")
-(defconstant +terminal-cyan+ "0;36")
-(defconstant +terminal-light-gray+ "0;37")
-(defconstant +terminal-dark-gray+ "1;30")
-(defconstant +terminal-light-red+ "1;31")
-(defconstant +terminal-light-green+ "1;32")
-(defconstant +terminal-yellow+ "1;33")
-(defconstant +terminal-light-blue+ "1;34")
-(defconstant +terminal-light-purple+ "1;35")
-(defconstant +terminal-light-cyan+ "1;36")
-(defconstant +terminal-white+ "1;37")
+(eval-when (:compile-toplevel)
+  (defconstant +terminal-escape+ #?"\e[")
+  (defconstant +terminal-escape-finish-char+ #\m)
+  (defconstant +terminal-black+ "0;30")
+  (defconstant +terminal-red+ "0;31")
+  (defconstant +terminal-green+ "0;32")
+  (defconstant +terminal-brown+ "0;33")
+  (defconstant +terminal-blue+ "0;34")
+  (defconstant +terminal-purple+ "0;35")
+  (defconstant +terminal-cyan+ "0;36")
+  (defconstant +terminal-light-gray+ "0;37")
+  (defconstant +terminal-dark-gray+ "1;30")
+  (defconstant +terminal-light-red+ "1;31")
+  (defconstant +terminal-light-green+ "1;32")
+  (defconstant +terminal-yellow+ "1;33")
+  (defconstant +terminal-light-blue+ "1;34")
+  (defconstant +terminal-light-purple+ "1;35")
+  (defconstant +terminal-light-cyan+ "1;36")
+  (defconstant +terminal-white+ "1;37"))
 
 (defun symbol->keyword (sym)
   "convert a symbol to keyword.
@@ -91,6 +98,8 @@
    defclass* automatically define accessor and initarg.
 
    ;;; (defclass* <hoge> () ((a 1) (b 2))) -> <hoge>
+   ;;; (defclass* <fuga> () ((a 100) (B 'piyo))
+   ;;;     (:documentation .....))
    "
   `(defclass ,class-name
        ,supers
@@ -155,8 +164,7 @@
   `(progn
      (if ',func-name
          (format t "~s -> ~s -- ~s --~%" ',sym ,sym ',func-name)
-         (format t "~s -> ~s~%" ',sym ,sym))
-     ))
+         (format t "~s -> ~s~%" ',sym ,sym))))
 
 (defun all-combination (lst)
   "make a list of all combination of lst
@@ -219,6 +227,7 @@
   (sb-thread:make-mutex))
 
 (defun all (proc list)
+  (declare (type list list))
   (cond ((null list)
          t)
         ((funcall proc (car list))
@@ -250,6 +259,7 @@
   "returns difference between a and b
 
    ;;; (difference-list '(1 2 3) '(1 1 3)) -> '(2)"
+  (declare (type list a b))
   (cond ((null a)
          nil)
         ((equal (car a) (car b))
@@ -257,12 +267,25 @@
         (t
          (cons (car a) (difference-list (cdr a) (cdr b))))))
 
-(defun local-time-string ()
-  "returns current year, month, date, time as a string.
-   format is YYYY-MM-DD-hh-mm-ss."
-  (multiple-value-bind (sec min hour day mon year)
-      (decode-universal-time (get-universal-time))
-    (format nil "~2,'0D-~2,'0D-~2,'0D-~2,'0D-~2,'0D-~2,'0D" year mon day hour min sec)))
+(defun concatenate-string-with (string-list space)
+  "concatenate string-list with space.
+
+  ;;; (concatenate-string-with '(\"hoge\" \"fuga\" \"piyo\") \"-\")
+  ;;; => \"hoge-fuga-piyo\""
+  (declare (type list string-list)
+	   (type string space))
+  (labels ((%concatenate-string-with
+	       (string-list space)
+	     (declare (type list string-list)
+		      (type string space))
+	     (cond ((null string-list)
+		    nil)
+		   ((null (cdr string-list))
+		    (list (car string-list)))
+		   (t
+		    (append (list (car string-list) space)
+			    (%concatenate-string-with (cdr string-list) space))))))
+    (apply #'concatenate 'string (%concatenate-string-with string-list space))))
 
 (defun find-file-in-path (fname paths)
   "find fname in paths.
@@ -279,6 +302,7 @@
   "returns 'key' 's value in args.
 
    ;;; (get-keyword :hoge '(:hoge 1 :fuga 2)) -> 1"
+  (declare (type list args))
   (cadr (member key args)))
 
 (defmacro null-output (&rest args)
@@ -296,7 +320,14 @@
   (declare (type list list))
   (let ((len (length list)))
     (elt list (random len))))
-    
+
+(defun read-from-file (fname)
+  "open a file and call read.
+   This Function is efficient in read a file dumped
+   lisp object."
+  (with-open-file (f fname :direction :input)
+    (read f)))
+
 (defun list-rank (lst)
   "returns rank of lst.
 
@@ -333,3 +364,8 @@
 	    +terminal-escape+ color-str +terminal-escape-finish-char+
 	    str
 	    +terminal-escape+ +terminal-escape-finish-char+)))
+
+(defmacro nlet (n letargs &rest body)
+  `(labels ((,n ,(mapcar #'car letargs)
+              ,@body))
+     (,n ,@(mapcar #'cadr letargs))))
