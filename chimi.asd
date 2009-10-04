@@ -4,5 +4,6 @@
     :components ((:file "chimi")
 		 (:file "log" :depends-on ("chimi" "time"))
 		 (:file "time" :depends-on ("chimi"))
+                 (:file "system" :depends-on ("chimi"))
 		 (:file "gnuplot" :depends-on ("chimi"))
 		 ))

@@ -29,6 +29,10 @@
 	   #:random-select
 	   #:read-from-file
 	   #:list-rank
+           #:nlet
+           #:cl-array->c-array
+           ;; system.lisp
+           #:pwd #:ls #:cd
 	   ;; terminal
 	   #:escape-string-with-color
 	   ;; log.lisp
@@ -369,3 +373,12 @@
   `(labels ((,n ,(mapcar #'car letargs)
               ,@body))
      (,n ,@(mapcar #'cadr letargs))))
+
+(defun cl-array->c-array (array type)
+  (let ((len (length array)))
+    ;;(let ((cobj (eval `(sb-alien:make-alien (array ,type ,len)))))
+    (let ((cobj (eval `(sb-alien:make-alien ,type ,len))))
+      (dotimes (i len)
+        (setf (sb-alien:deref cobj i)
+              (aref array i)))
+      cobj)))
