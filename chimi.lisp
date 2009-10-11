@@ -392,3 +392,4 @@
      (declaim (inline ,name))
      (defun ,name ,args
        ,@body)))
+

@@ -9,8 +9,8 @@
   (sb-posix:getcwd))
 
 (defun ls (&optional (arg (pwd)))
+  (cl-fad:list-directory arg))
   
-  )
 
 (defun cd (&optional (arg (getenv "HOME")))
   (sb-posix:chdir arg)
