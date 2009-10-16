@@ -57,6 +57,7 @@
 	   #:save-plot-to-file
 	   #:save-plot-to-pdf #:save-plot-to-png
 	   #:save-plot-to-jpg #:save-plot-to-eps
+           ;; cffiext.lisp
            #:defcstruct-accessor
            #:defcstruct-accessors)
   (:documentation
@@ -66,67 +67,6 @@
   )
 
 (in-package #:chimi)
-
-(cl-interpol:enable-interpol-syntax)
-(eval-when (:compile-toplevel)
-  (alexandria:define-constant +terminal-escape+ #?"\e[" :test #'string=)
-  (alexandria:define-constant +terminal-escape-finish-char+ #\m)
-  (alexandria:define-constant +terminal-black+ "0;30" :test #'string=)
-  (alexandria:define-constant +terminal-red+ "0;31" :test #'string=)
-  (alexandria:define-constant +terminal-green+ "0;32" :test #'string=)
-  (alexandria:define-constant +terminal-brown+ "0;33" :test #'string=)
-  (alexandria:define-constant +terminal-blue+ "0;34" :test #'string=)
-  (alexandria:define-constant +terminal-purple+ "0;35" :test #'string=)
-  (alexandria:define-constant +terminal-cyan+ "0;36" :test #'string=)
-  (alexandria:define-constant +terminal-light-gray+ "0;37" :test #'string=)
-  (alexandria:define-constant +terminal-dark-gray+ "1;30" :test #'string=)
-  (alexandria:define-constant +terminal-light-red+ "1;31" :test #'string=)
-  (alexandria:define-constant +terminal-light-green+ "1;32" :test #'string=)
-  (alexandria:define-constant +terminal-yellow+ "1;33" :test #'string=)
-  (alexandria:define-constant +terminal-light-blue+ "1;34" :test #'string=)
-  (alexandria:define-constant +terminal-light-purple+ "1;35" :test #'string=)
-  (alexandria:define-constant +terminal-light-cyan+ "1;36" :test #'string=)
-  (alexandria:define-constant +terminal-white+ "1;37" :test #'string=))
-
-(defun symbol->keyword (sym)
-  "convert a symbol to keyword.
-   this function is very slow, because it uses read-from-string.
-  ;;; (symbol->keyword 'hoge) -> :hoge"
-  (declare (type symbol sym))
-  (read-from-string (concatenate 'string ":" (string sym))))
-
-(defun string->symbol (str)
-  "convert string to symbol.
-   this function is very slow, because it uses read-from-string.
-  ;;; (string->symbol \"hoge\") -> hoge"
-  (declare (type string str))
-  (read-from-string str))
-
-(defun symbol-concatenate (a b)
-  (string->symbol (concatenate 'string (string a) (string b))))
-                  
-
-(defmacro defclass* (class-name supers slots &rest args)
-  "defclass* is a rich wrapper of defclass.
-   defclass* automatically define accessor and initarg.
-
-   ;;; (defclass* <hoge> () ((a 1) (b 2))) -> <hoge>
-   ;;; (defclass* <fuga> () ((a 100) (B 'piyo))
-   ;;;     (:documentation .....))
-   "
-  `(defclass ,class-name
-       ,supers
-     ,(mapcar
-       #'(lambda (x)
-	   (if (atom x)
-	       (list x :initform nil
-		     :initarg (symbol->keyword x)
-		     :accessor (string->symbol (concatenate 'string (string x) "-of")))
-	       (list (car x) :initform (cadr x)
-		     :initarg (symbol->keyword (car x))
-		     :accessor (string->symbol (concatenate 'string (string (car x)) "-of")))))
-       slots)
-     ,@args))
   
 (defmacro while (test &rest args)
   "CL does not provides while macro.
@@ -199,13 +139,6 @@
                     ret)))
           lst :initial-value :nil))
 
-(defun getenv (str)
-  "returns environment variable's value as string.
-
-   ;;; (getenv \"HOME\") -> \"/path/to/your/home/directory\""
-  (declare (type string str))
-  #+sbcl
-  (SB-POSIX:GETENV str))
 
 (defmacro defvirtualmethod (method-name args)
   `(defmethod ,method-name ,args

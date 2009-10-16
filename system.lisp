@@ -15,3 +15,11 @@
 (defun cd (&optional (arg (getenv "HOME")))
   (sb-posix:chdir arg)
   (pwd))
+
+(defun getenv (str)
+  "returns environment variable's value as string.
+
+   ;;; (getenv \"HOME\") -> \"/path/to/your/home/directory\""
+  (declare (type string str))
+  #+sbcl
+  (SB-POSIX:GETENV str))
