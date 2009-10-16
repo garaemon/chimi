@@ -406,23 +406,3 @@
     (iterate:for a in check-args)
     (if (null a)
         (error (format nil "~A~A" string check-args)))))
-    
-
-#|
-(defcstruct-accessor event- type 'XEvent)
-|#
-(defmacro defcstruct-accessor (prefix slot c-type)
-  (let ((func-name (chimi:symbol-concatenate prefix slot)))
-    `(progn
-       ;;(format t "#:~A~%" ',func-name)
-       (defun ,func-name (arg)
-         (cffi:foreign-slot-value arg ,c-type ',slot))
-       (defun (setf ,func-name) (arg value)
-         (setf (cffi:foreign-slot-value arg ,c-type ',slot) value))
-       )))
-
-(defmacro defcstruct-accessors (prefix slots c-type)
-  `(progn
-     ,@(mapcar #'(lambda (slot)
-                  `(defcstruct-accessor ,prefix ,slot ,c-type))
-              slots)))
