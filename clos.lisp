@@ -30,3 +30,7 @@
 		     :accessor (string->symbol (concatenate 'string (string (car x)) "-of")))))
        slots)
      ,@args))
+
+(defmacro defvirtualmethod (method-name args)
+  `(defmethod ,method-name ,args
+     (error "this is a virtual method ~A" ',method-name)))

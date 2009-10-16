@@ -62,156 +62,21 @@
            #:defcstruct-accessors)
   (:documentation
    "chimi package provides the some utilities
-    efficient in common. 
-   ")
+    efficient in common. ")
   )
 
 (in-package #:chimi)
   
 (defmacro while (test &rest args)
   "CL does not provides while macro.
-
+   ;;; (defvar *hoge-list* '(1 2 3))
    ;;; (while (pop *hoge-list*)
    ;;;    (print *hoge-list*))
+   ;;; ; => (2 3) (3) NIL
    "
   `(do ()
        ((not ,test))
      ,@args))
-
-(defun replace-list (target from to &key (test #'equal))
-  "replace 'from' in 'target' to 'to'
-
-  ;;; (replace-list '(1 2 3 4 5) '(1 2 3) '(2 4 6)) -> (2 4 6 4 5)"
-  (declare (type list from to))
-  (cond ((null target)
-         nil)
-        ((listp target)
-         (cons (replace-list (car target) from to :test test)
-               (replace-list (cdr target) from to :test test)))
-        (t
-         (let ((location (position target from)))
-           (if location
-               (elt to location)
-               target)))))
-
-;; 展開方法が,@的な
-(defun replace-list-flat1 (datum froms tos &key (test #'equal))
-  (let ((ret nil))
-    (dolist (d datum)
-      (let ((flag nil))
-        (dotimes (fi (length froms))
-          (if (funcall test (elt froms fi) d)
-              (setq flag (elt tos fi)))
-          )
-        (if flag
-            (push (flatten flag) ret)
-            (push d ret))
-        ))
-    (reverse ret)))
-
-(defmacro debug-print-variable (sym &optional (func-name nil))
-  "print symbol and it's value.
-
-  ;;; (defvar *hoge* 100)
-  ;;; (debug-print-variable *hoge*) -> \"*hoge* -> 100\""
-  `(progn
-     (if ',func-name
-         (format t "~s -> ~s -- ~s --~%" ',sym ,sym ',func-name)
-         (format t "~s -> ~s~%" ',sym ,sym))))
-
-(defun all-combination (lst)
-  "make a list of all combination of lst
-
-  ;; (all-combination '((1) (2) (3))) -> ((1 2 3))
-  "
-  (declare (type list lst))
-  (reduce #'(lambda (prev target)
-              (declare (type list target))
-              (if (eq prev :nil)
-                  (mapcar #'list target)
-                  (let ((ret nil))
-                    (declare (type list ret))
-                    (dolist (ta target)
-                      (dolist (p prev)
-                        (declare (type list p))
-                        (push (append p (list ta)) ret)
-			))
-                    ret)))
-          lst :initial-value :nil))
-
-
-(defmacro defvirtualmethod (method-name args)
-  `(defmethod ,method-name ,args
-     (error "this is a virtual method ~A" ',method-name))
-  )
-
-(defun flatten (lst)
-  "flatten a list.
-
-   ;;; (flatten '((1 2) (3 4))) -> (1 2 3 4)"
-  (cond ((null lst)
-         nil)
-        ((atom lst)
-         (list lst))
-        (t                              ;lst = list
-         ;;(declare (type list lst))
-         (append (flatten (car lst))
-                 (flatten (cdr lst)))
-         )))
-
-(defmacro with-mutex (mutex &rest body)
-  #+sbcl
-  `(sb-thread:with-mutex ,mutex
-     ,@body))
-
-(defun make-thread (arg)
-  #+sbcl
-  (sb-thread:make-thread arg))
-
-(defun make-mutex ()
-  #+sbcl
-  (sb-thread:make-mutex))
-
-(defun all (proc list)
-  (declare (type list list))
-  (cond ((null list)
-         t)
-        ((funcall proc (car list))
-         (all proc (cdr list)))
-        (t
-         nil)))
-
-(defun any (proc list)
-  (declare (type list list))
-  (cond ((null list)
-         nil)
-        ((funcall proc (car list))
-         (car list))
-        (t
-         (any proc (cdr list)))))
-
-;; find-all = remove-if-not??
-(defun find-all (proc list)
-  "is this same to remove-if-not??"
-  (declare (type list list))
-  (cond ((null list)
-         nil)
-        ((funcall proc (car list))
-         (cons (car list) (find-all proc (cdr list))))
-        (t
-         (find-all proc (cdr list)))))
-
-(defun difference-list (a b)
-  "returns difference between a and b
-
-   ;;; (difference-list '(1 2 3) '(1 1 3)) -> '(2)"
-  (declare (type list a b))
-  (cond ((null a)
-         nil)
-        ((equal (car a) (car b))
-         (difference-list (cdr a) (cdr b)))
-        (t
-         (cons (car a) (difference-list (cdr a) (cdr b))))))
 
 (defun concatenate-string-with (string-list space)
   "concatenate string-list with space.
@@ -251,22 +116,6 @@
   (declare (type list args))
   (cadr (member key args)))
 
-(defmacro null-output (&rest args)
-  "the output of all sexp in null-output is redirect to /dev/null.
-   "
-  ;;*standard-output* *error-outuput*
-  (let ((f (gensym)))
-    `(with-open-file (,f "/dev/null" :direction :output :if-exists :append)
-       (let ((*standard-output* ,f)
-	     (*error-outuput* ,f))
-	 ,@args))))
-
-(defun random-select (list)
-  "returns a element of list randomly"
-  (declare (type list list))
-  (let ((len (length list)))
-    (elt list (random len))))
-
 (defun read-from-file (fname)
   "open a file and call read.
    This Function is efficient in read a file dumped
@@ -274,59 +123,10 @@
   (with-open-file (f fname :direction :input)
     (read f)))
 
-(defun list-rank (lst)
-  "returns rank of lst.
-
-   ;;; (list-rank nil) -> 0
-   ;;; (list-rank '(1 2 3)) -> 1
-   ;;; (list-rank '((1 2 3))) -> 2"
-  (if (atom lst)
-      0
-      (1+ (list-rank (car lst)))))
-
-(defun keyword->color-string (color-sym)
-  (case color-sym
-    (:black +terminal-black+)
-    (:red +terminal-red+)
-    (:green +terminal-green+)
-    (:brown +terminal-brown+)
-    (:blue +terminal-blue+)
-    (:purple +terminal-purple+)
-    (:cyan +terminal-cyan+)
-    (:light-gray +terminal-light-gray+)
-    (:dark-gray +terminal-dark-gray+)
-    (:light-red +terminal-light-red+)
-    (:light-green +terminal-light-green+)
-    (:yellow +terminal-yellow+)
-    (:light-blue +terminal-light-blue+)
-    (:light-purple +terminal-light-purple+)
-    (:light-cyan +terminal-light-cyan+)
-    (:white +terminal-white+)
-    ))
-
-(defun escape-string-with-color (str color)
-  (let ((color-str (keyword->color-string color)))
-    (format nil "~A~A~A~A~A~A"
-	    +terminal-escape+ color-str +terminal-escape-finish-char+
-	    str
-	    +terminal-escape+ +terminal-escape-finish-char+)))
-
 (defmacro nlet (n letargs &rest body)
   `(labels ((,n ,(mapcar #'car letargs)
               ,@body))
      (,n ,@(mapcar #'cadr letargs))))
-
-(defmacro with-cl-sequence->cffi-array ((sym v type) &rest args)
-  (let ((i (gensym)))
-    `(cffi:with-foreign-object
-         (,sym ,type (length ,v))
-       (iterate:iter                       
-        (iterate:for ,i from 0 to (1- (length ,v)))
-        (setf (cffi:mem-aref ,sym ,type ,i) (elt ,v ,i)))
-       ,@args)))
-
-(defun current-thread ()
-  sb-thread:*current-thread*)
 
 (defmacro defun-inline (name args &rest body)
   `(progn

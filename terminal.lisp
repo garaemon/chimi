@@ -57,3 +57,12 @@
 	    str
 	    +terminal-escape+ +terminal-escape-finish-char+)))
 
+(defmacro null-output (&rest args)
+  "the output of all sexp in null-output is redirect to /dev/null.
+   "
+  ;;*standard-output* *error-outuput*
+  (let ((f (gensym)))
+    `(with-open-file (,f "/dev/null" :direction :output :if-exists :append)
+       (let ((*standard-output* ,f)
+	     (*error-outuput* ,f))
+	 ,@args))))

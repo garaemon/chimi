@@ -28,3 +28,11 @@
                   `(defcstruct-accessor ,prefix ,slot ,c-type))
               slots)))
 
+(defmacro with-cl-sequence->cffi-array ((sym v type) &rest args)
+  (let ((i (gensym)))
+    `(cffi:with-foreign-object
+         (,sym ,type (length ,v))
+       (iterate:iter                       
+        (iterate:for ,i from 0 to (1- (length ,v)))
+        (setf (cffi:mem-aref ,sym ,type ,i) (elt ,v ,i)))
+       ,@args)))
