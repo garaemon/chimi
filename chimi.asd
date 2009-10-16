@@ -5,7 +5,7 @@
                  (:file "io" :depends-on ("chimi"))
                  (:file "threads" :depends-on ("chimi"))
                  (:file "cffiext" :depends-on ("chimi"))
-                 (:file "clos" :depends-on ("chimi"))
+                 (:file "util-macro" :depends-on ("chimi"))
                  (:file "terminal" :depends-on ("chimi"))
                  (:file "symbol" :depends-on ("chimi"))
                  (:file "sequence" :depends-on ("chimi"))

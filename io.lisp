@@ -26,3 +26,13 @@
   (with-open-file (f fname :direction :input)
     (read f)))
 
+(defun find-file-in-path (fname paths)
+  "find fname in paths.
+   paths is a list of pathname or string."
+  (let ((fname-pathname (if (stringp fname) (pathname fname) fname))
+        (paths-pathname (mapcar #'(lambda (p) (if (stringp p) (pathname p) p)) paths)))
+    (dolist (p paths-pathname)
+      (let ((merge-pathname (merge-pathnames p fname-pathname)))
+        (if (probe-file merge-pathname)
+            (return merge-pathname)
+            nil)))))
