@@ -14,6 +14,7 @@
   (:use #:common-lisp #:sb-unix)
   (:export #:defclass*
 	   #:symbol->keyword #:string->symbol
+           #:symbol-concatenate
 	   #:while
 	   #:replace-list #:replace-list-flat1
 	   #:debug-print-variable
@@ -32,6 +33,7 @@
            #:nlet
            #:with-cl-sequence->cffi-array
            #:current-thread
+           #:check-null-error
            ;; system.lisp
            #:pwd #:ls #:cd
 	   ;; terminal
@@ -54,7 +56,9 @@
 	   #:one-data-plot
 	   #:save-plot-to-file
 	   #:save-plot-to-pdf #:save-plot-to-png
-	   #:save-plot-to-jpg #:save-plot-to-eps)
+	   #:save-plot-to-jpg #:save-plot-to-eps
+           #:defcstruct-accessor
+           #:defcstruct-accessors)
   (:documentation
    "chimi package provides the some utilities
     efficient in common. 
@@ -97,6 +101,10 @@
   ;;; (string->symbol \"hoge\") -> hoge"
   (declare (type string str))
   (read-from-string str))
+
+(defun symbol-concatenate (a b)
+  (string->symbol (concatenate 'string (string a) (string b))))
+                  
 
 (defmacro defclass* (class-name supers slots &rest args)
   "defclass* is a rich wrapper of defclass.
@@ -393,3 +401,28 @@
      (defun ,name ,args
        ,@body)))
 
+(defun check-null-error (string check-args)
+  (iterate:iter
+    (iterate:for a in check-args)
+    (if (null a)
+        (error (format nil "~A~A" string check-args)))))
+    
+
+#|
+(defcstruct-accessor event- type 'XEvent)
+|#
+(defmacro defcstruct-accessor (prefix slot c-type)
+  (let ((func-name (chimi:symbol-concatenate prefix slot)))
+    `(progn
+       ;;(format t "#:~A~%" ',func-name)
+       (defun ,func-name (arg)
+         (cffi:foreign-slot-value arg ,c-type ',slot))
+       (defun (setf ,func-name) (arg value)
+         (setf (cffi:foreign-slot-value arg ,c-type ',slot) value))
+       )))
+
+(defmacro defcstruct-accessors (prefix slots c-type)
+  `(progn
+     ,@(mapcar #'(lambda (slot)
+                  `(defcstruct-accessor ,prefix ,slot ,c-type))
+              slots)))
