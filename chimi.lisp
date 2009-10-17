@@ -33,7 +33,7 @@
            #:nlet
            #:with-cl-sequence->cffi-array
            #:current-thread
-           #:check-null-error
+           #:check-args-error
            ;; system.lisp
            #:pwd #:ls #:cd
 	   ;; terminal

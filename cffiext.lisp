@@ -17,7 +17,6 @@
 (defmacro defcstruct-accessor (prefix slot c-type)
   (let ((func-name (chimi:symbol-concatenate prefix slot)))
     `(progn
-       ;;(format t "#:~A~%" ',func-name)
        (defun ,func-name (arg)
          (cffi:foreign-slot-value arg ,c-type ',slot))
        (defun (setf ,func-name) (arg value)
