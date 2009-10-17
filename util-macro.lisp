@@ -34,14 +34,15 @@
        ,@body)))
 
 (defmacro check-args-error (str &rest args)
-  `(iterate:iter
-    (iterate:for arg in args)
-    (%check-args-error ,str ,(car args) ,(cadr args) ,(caddr args))))
+  `(progn
+     ,@(mapcar #'(lambda (arg)
+                   `(%check-args-error ,str ,arg))
+               args)))
 
-(defun %check-args-error (str arg sym func)
-  (if (funcall func arg)
-      (error (format nil "~A ~s" str sym))
-      t))
+(defmacro %check-args-error (str (value sym func))
+  `(if (funcall ,func ,value)
+       (error (format nil "~A ~s" ,str ,sym))
+       t))
 
 (defmacro defclass* (class-name supers slots &rest args)
   "defclass* is a rich wrapper of defclass.
