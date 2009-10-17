@@ -3,9 +3,11 @@
 ;;
 ;; written by R.Ueda (garaemon)
 ;;================================================
-(declaim (optimize (debug 3)
-                   (safety 3)))
-
+(declaim (optimize (debug 0)
+                   (safety 0)
+                   (speed 3)
+                   (compilation-speed 0)
+                   (space 0)))
 
 (in-package :chimi)
 
@@ -43,8 +45,7 @@
 (defun all-combination (lst)
   "make a list of all combination of lst
 
-  ;; (all-combination '((1) (2) (3))) -> ((1 2 3))
-  "
+  ;; (all-combination '((1) (2) (3))) -> ((1 2 3))"
   (declare (type list lst))
   (reduce #'(lambda (prev target)
               (declare (type list target))

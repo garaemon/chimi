@@ -3,6 +3,11 @@
 ;;
 ;; written by R.Ueda (garaemon)
 ;;================================================
+(declaim (optimize (debug 0)
+                   (safety 0)
+                   (speed 3)
+                   (compilation-speed 0)
+                   (space 0)))
 
 (in-package :chimi)
 
