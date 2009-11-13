@@ -11,7 +11,8 @@
 		   (space 0)))
 
 (defpackage :chimi
-  (:use #:common-lisp #:sb-unix)
+  (:use #:common-lisp 
+	#+sbcl #:sb-unix)
   (:export #:defclass*
 	   #:symbol->keyword #:string->symbol
            #:symbol-concatenate
