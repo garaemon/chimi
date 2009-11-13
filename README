@@ -1,4 +1,4 @@
 chimi -- CL Utility Library --
 
-please look doc/html/index.html
-
+chimi contains many Utilities for Common Lisp.
+chimi works on SBCL and ACL.
