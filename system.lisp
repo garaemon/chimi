@@ -1,8 +1,11 @@
 ;;================================================
 ;; system.lisp
-;;
+;; 
+;; Posix like system 
+;; 
 ;; written by R.Ueda (garaemon)
 ;;================================================
+
 (declaim (optimize (debug 0)
                    (safety 0)
                    (speed 3)
@@ -12,20 +15,27 @@
 (in-package :chimi)
 
 (defun pwd ()
-  (sb-posix:getcwd))
+  #+sbcl
+  (sb-posix:getcwd)
+  #+allegro
+  (current-directory))
 
 (defun ls (&optional (arg (pwd)))
-  (cl-fad:list-directory arg))
-  
+  (directory arg))
 
 (defun cd (&optional (arg (getenv "HOME")))
-  (sb-posix:chdir arg)
-  (pwd))
+  #+sbcl
+  (progn
+    (sb-posix:chdir arg)
+    (pwd))
+  #+allegro
+  (chdir arg))
 
 (defun getenv (str)
   "returns environment variable's value as string.
 
    ;;; (getenv \"HOME\") -> \"/path/to/your/home/directory\""
-  (declare (type string str))
   #+sbcl
-  (SB-POSIX:GETENV str))
+  (sb-posix:getenv str)
+  #+allegro
+  (sys:getenv str))

@@ -3,6 +3,9 @@
 ;;
 ;; written by R.Ueda (garaemon)
 ;;================================================
+;; TODO:
+;;   we have to use bordeaux threads.
+
 (declaim (optimize (debug 0)
                    (safety 0)
                    (speed 3)
@@ -14,7 +17,8 @@
 (defmacro with-mutex (mutex &rest body)
   #+sbcl
   `(sb-thread:with-mutex ,mutex
-     ,@body))
+     ,@body)
+  )
 
 (defun make-thread (arg)
   #+sbcl
