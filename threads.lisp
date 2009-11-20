@@ -3,8 +3,6 @@
 ;;
 ;; written by R.Ueda (garaemon)
 ;;================================================
-;; TODO:
-;;   we have to use bordeaux threads.
 
 (declaim (optimize (debug 0)
                    (safety 0)
