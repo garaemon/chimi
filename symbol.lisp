@@ -26,13 +26,14 @@
   (read-from-string str))
 
 (defun symbol-concatenate (a b)
+  "concatenate symbol.
+   ;;; (symbol-concatenate 'hoge 'fuga) => HOGEFUGA"
   (string->symbol (concatenate 'string (string a) (string b))))
 
 (defmacro debug-print-variable (sym &optional (func-name nil))
-  "print symbol and it's value.
-
-  ;;; (defvar *hoge* 100)
-  ;;; (debug-print-variable *hoge*) -> \"*hoge* -> 100\""
+  ;;print symbol and it's value.
+  ;; (defvar *hoge* 100)
+  ;; (debug-print-variable *hoge*) => "*hoge* -> 100"
   `(progn
      (if ',func-name
          (format t "~s -> ~s -- ~s --~%" ',sym ,sym ',func-name)

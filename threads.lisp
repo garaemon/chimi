@@ -14,20 +14,17 @@
 
 (in-package :chimi)
 
-(defmacro with-mutex (mutex &rest body)
-  #+sbcl
-  `(sb-thread:with-mutex ,mutex
-     ,@body)
-  )
+(defmacro with-mutex ((mutex &key (lock t)) &rest body)
+  `(when (or (not ,lock) (bordeaux-threads:acquire-lock ,mutex t))
+     (unwind-protect
+          (locally ,@body)
+       (if ,lock (bordeaux-threads:release-lock ,mutex)))))
 
 (defun make-thread (arg)
-  #+sbcl
-  (sb-thread:make-thread arg))
+  (bordeaux-threads:make-thread arg))
 
 (defun make-mutex ()
-  #+sbcl
-  (sb-thread:make-mutex))
+  (bordeaux-threads:make-lock))
 
 (defun current-thread ()
-  #+sbcl
-  sb-thread:*current-thread*)
+  (bordeaux-threads:current-thread))

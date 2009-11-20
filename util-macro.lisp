@@ -12,17 +12,17 @@
 (in-package :chimi)
 
 (defmacro while (test &rest args)
-  "CL does not provides while macro.
-   ;;; (defvar *hoge-list* '(1 2 3))
-   ;;; (while (pop *hoge-list*)
-   ;;;    (print *hoge-list*))
-   ;;; ; => (2 3) (3) NIL
-   "
+  ;;CL ANSI Spec does not provides while macro.
+  ;; (defvar *hoge-list* '(1 2 3))
+  ;; (while (pop *hoge-list*)
+  ;;    (print *hoge-list*))
+  ;; ; => (2 3) (3) NIL
   `(do ()
        ((not ,test))
      ,@args))
 
 (defmacro nlet (n letargs &rest body)
+  ;; named let like scheme's let.
   `(labels ((,n ,(mapcar #'car letargs)
               ,@body))
      (,n ,@(mapcar #'cadr letargs))))
@@ -45,13 +45,12 @@
        t))
 
 (defmacro defclass* (class-name supers slots &rest args)
-  "defclass* is a rich wrapper of defclass.
-   defclass* automatically define accessor and initarg.
-
-   ;;; (defclass* <hoge> () ((a 1) (b 2))) -> <hoge>
-   ;;; (defclass* <fuga> () ((a 100) (B 'piyo))
-   ;;;     (:documentation .....))
-   "
+  ;;defclass* is a rich wrapper of defclass.
+  ;; defclass* automatically define accessor and initarg.
+  ;;
+  ;; (defclass* <hoge> () ((a 1) (b 2))) -> <hoge>
+  ;; (defclass* <fuga> () ((a 100) (B 'piyo))
+  ;;     (:documentation .....))
   `(defclass ,class-name
        ,supers
      ,(mapcar
