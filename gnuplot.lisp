@@ -1,6 +1,10 @@
 ;;================================================
 ;; gnuplot.lisp
 ;;
+;; gnuplot interface.
+;; gnuplot must be in $PATH.
+;; this interface is NOT thread-safe.
+;;
 ;; written by R.Ueda (garaemon)
 ;;================================================
 
@@ -20,6 +24,7 @@
     ()
   ((stream nil)
    (data nil)
+   (data-length 100)
    (last-command nil))
   (:documentation
    "gnuplot's process stream class."))
@@ -62,11 +67,14 @@
 			     (xlogscale nil)
 			     (ylogscale nil)
 			     (grid nil)
-			     (replot nil))
+			     (replot nil)
+                             (data-length nil))
   (if xrange
-      (format-to-gnuplot *gnuplot* "set xrange [~A:~A]~%" (car xrange) (cadr xrange)))
+      (format-to-gnuplot *gnuplot*
+                         "set xrange [~A:~A]~%" (car xrange) (cadr xrange)))
   (if yrange
-      (format-to-gnuplot *gnuplot* "set yrange [~A:~A]~%" (car yrange) (cadr yrange)))
+      (format-to-gnuplot *gnuplot*
+                         "set yrange [~A:~A]~%" (car yrange) (cadr yrange)))
   (if xlabel
       (format-to-gnuplot *gnuplot* "set xlabel ~s~%" xlabel))
   (if ylabel
@@ -82,6 +90,8 @@
       (format-to-gnuplot *gnuplot* "set logscale y"))
   (if replot
       (format-to-gnuplot *gnuplot* "replot~%"))
+  (if data-length
+      (setf (data-length-of *gnuplot*) data-length))
   t)
 
 (defun plot-function (func-str
@@ -167,7 +177,16 @@
 		      &allow-other-keys)
   "plot data interpritingly"
   (if clear (clear-gnuplot-datum))
-  (push point (data-of *gnuplot*))
+  ;;(push point (data-of *gnuplot*))
+  (setf (data-of *gnuplot*)
+        (nconc (data-of *gnuplot*)
+               (list point)))
+  ;; check data length
+  (when (> (length (data-of *gnuplot*))
+           (data-length-of *gnuplot*))
+    ;; (a b c ... z) => (b c ... z)
+    (setf (data-of *gnuplot*)
+          (cdr (data-of *gnuplot*))))
   (apply #'plot-points (data-of *gnuplot*) args)
   t)
 

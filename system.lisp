@@ -1,8 +1,8 @@
 ;;================================================
 ;; system.lisp
 ;; 
-;; Posix like system 
-;; 
+;; Posix like system interface.
+;; It works on SBCL and Allegro Common Lisp.
 ;; written by R.Ueda (garaemon)
 ;;================================================
 
@@ -23,14 +23,6 @@
 (defun ls (&optional (arg (pwd)))
   (directory arg))
 
-(defun cd (&optional (arg (getenv "HOME")))
-  #+sbcl
-  (progn
-    (sb-posix:chdir arg)
-    (pwd))
-  #+allegro
-  (chdir arg))
-
 (defun getenv (str)
   "returns environment variable's value as string.
 
@@ -39,3 +31,15 @@
   (sb-posix:getenv str)
   #+allegro
   (sys:getenv str))
+
+(defun cd (&optional (arg (getenv "HOME")))
+  #+sbcl
+  (sb-posix:chdir arg)
+  #+allegro
+  (chdir arg)
+  (pwd))                                ;returns current directory
+
+;; piped fork
+;;(defun run-program ()
+;;  )
+

@@ -5,7 +5,8 @@
 ;;================================================
 
 (require :asdf)
-(asdf:operate 'asdf:load-op 'chimi)
+(require :chimi)
+
 (use-package :chimi)
 
 ;; open gnuplot process
@@ -34,8 +35,9 @@
   )
 
 ;; set graph properties
-(set-graph-properties :xrange (list (coerce pi 'single-float) (- (coerce pi 'single-float)))
-		      :yrange '(-1 1))
+(set-graph-properties
+ :xrange (list (coerce pi 'single-float) (- (coerce pi 'single-float)))
+ :yrange '(-1 1))
 ;; plot intepritingly
 (clear-gnuplot-datum)
 (dotimes (i 100)
