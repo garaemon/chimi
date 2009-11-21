@@ -47,10 +47,9 @@
 
 (defun close-gnuplot ()
   "close gnuplot process."
-  (if *gnuplot*
-      (progn
-	(close (stream-of *gnuplot*))
-	(setf *gnuplot* nil)))
+  (when *gnuplot*
+    (close (stream-of *gnuplot*))
+    (setf *gnuplot* nil))
   t)
 
 (defmethod format-to-gnuplot ((gnuplot <gnuplot>) str &rest args)
@@ -177,7 +176,7 @@
 		      &allow-other-keys)
   "plot data interpritingly"
   (if clear (clear-gnuplot-datum))
-  ;;(push point (data-of *gnuplot*))
+  ;; add point to the last of data
   (setf (data-of *gnuplot*)
         (nconc (data-of *gnuplot*)
                (list point)))
@@ -221,4 +220,3 @@
 (defun save-plot-to-eps (fname)
   "save gnuplot's view to a eps."
   (save-plot-to-file fname "eps"))
-
