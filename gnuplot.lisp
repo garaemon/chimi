@@ -106,9 +106,11 @@
   (setf (last-command-of *gnuplot*)
 	(append (list #'plot-function func-str) args))
   (cond ((= dimension 2)
-         (format-to-gnuplot *gnuplot* (if clear "plot ~A " "replot ~A ") func-str))
+         (format-to-gnuplot *gnuplot*
+                            (if clear "plot ~A " "replot ~A ") func-str))
         ((= dimension 3)
-         (format-to-gnuplot *gnuplot* (if clear "splot ~A " "replot ~A ") func-str))
+         (format-to-gnuplot *gnuplot*
+                            (if clear "splot ~A " "replot ~A ") func-str))
         (t
          (error "diemnsion must be 2 or 3.")))
   (if title

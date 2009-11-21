@@ -14,6 +14,7 @@
   (:use #:common-lisp 
 	#+sbcl #:sb-unix)
   (:export #:defclass*
+           #:definitializer
 	   #:symbol->keyword #:string->symbol
            #:symbol-concatenate
 	   #:while

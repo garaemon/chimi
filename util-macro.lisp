@@ -44,33 +44,3 @@
        (error (format nil "~A ~s" ,str ,sym))
        t))
 
-(defmacro defclass* (class-name supers slots &rest args)
-  ;;defclass* is a rich wrapper of defclass.
-  ;; defclass* automatically define accessor and initarg.
-  ;;
-  ;; (defclass* <hoge> () ((a 1) (b 2))) -> <hoge>
-  ;; (defclass* <fuga> () ((a 100) (B 'piyo))
-  ;;     (:documentation .....))
-  `(defclass ,class-name
-       ,supers
-     ,(mapcar
-       #'(lambda (x)
-	   (if (atom x)
-	       (list x :initform nil
-		     :initarg (symbol->keyword x)
-		     :accessor (string->symbol
-                                (concatenate 'string
-                                             (string x)
-                                             "-of")))
-	       (list (car x) :initform (cadr x)
-		     :initarg (symbol->keyword (car x))
-		     :accessor (string->symbol
-                                (concatenate 'string
-                                             (string (car x))
-                                             "-of")))))
-       slots)
-     ,@args))
-
-(defmacro defvirtualmethod (method-name args)
-  `(defmethod ,method-name ,args
-     (error "this is a virtual method ~A" ',method-name)))
