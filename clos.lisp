@@ -49,3 +49,7 @@
        (destructuring-bind (,args)
            (list ,%args)
          ,@body))))
+
+(defun make-instance* (instance &rest args)
+  (apply #'make-instance instance :allow-other-keys t args))
+

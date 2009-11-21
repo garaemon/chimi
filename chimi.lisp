@@ -15,6 +15,7 @@
 	#+sbcl #:sb-unix)
   (:export #:defclass*
            #:definitializer
+           #:make-instance*
 	   #:symbol->keyword #:string->symbol
            #:symbol-concatenate
 	   #:while
