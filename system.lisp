@@ -39,6 +39,9 @@
   (chdir arg)
   (pwd))                                ;returns current directory
 
+(defun pathname->string (pathname)
+  (namestring pathname))
+
 ;; piped fork
 ;;(defun run-program ()
 ;;  )

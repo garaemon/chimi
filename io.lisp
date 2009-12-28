@@ -41,3 +41,11 @@
         (if (probe-file merge-pathname)
             (return merge-pathname)
             nil)))))
+
+(defun file->string (fname)
+  (with-open-file (f fname :direction :input)
+    (let ((str (make-string-output-stream)))
+      (let ((tmp nil))
+        (while (setq tmp (read-line f nil nil))
+          (write-string tmp str))
+        (get-output-stream-string str)))))

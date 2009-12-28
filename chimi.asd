@@ -11,7 +11,7 @@
                  (:file "terminal" :depends-on ("chimi"))
                  (:file "symbol" :depends-on ("chimi"))
                  (:file "sequence" :depends-on ("chimi"))
+                 (:file "time" :depends-on ("chimi" "util-macro"))
 		 (:file "log" :depends-on ("chimi" "time" "util-macro"))
-		 (:file "time" :depends-on ("chimi" "util-macro"))
                  (:file "system" :depends-on ("chimi"))
 		 (:file "gnuplot" :depends-on ("chimi" "util-macro"))))

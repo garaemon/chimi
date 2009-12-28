@@ -52,4 +52,3 @@
 
 (defun make-instance* (instance &rest args)
   (apply #'make-instance instance :allow-other-keys t args))
-
