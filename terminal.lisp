@@ -62,3 +62,5 @@
 	    str
 	    +terminal-escape+ +terminal-escape-finish-char+)))
 
+(defun value->colored-string (val color)
+  (escape-string-with-color (format nil "~A" val) color))

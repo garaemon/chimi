@@ -20,6 +20,8 @@
            #:symbol-concatenate
 	   #:while
 	   #:replace-list #:replace-list-flat1
+           ;; symbol.lisp
+           #:enable-debug-reader-macro
 	   #:debug-print-variable
 	   #:all-combination
 	   #:getenv
@@ -41,6 +43,7 @@
            #:pwd #:ls #:cd
 	   ;; terminal
 	   #:escape-string-with-color
+           #:value->colored-string
 	   ;; log.lisp
 	   #:make-logger
 	   #:log-format

@@ -38,3 +38,18 @@
      (if ',func-name
          (format t "~s -> ~s -- ~s --~%" ',sym ,sym ',func-name)
          (format t "~s -> ~s~%" ',sym ,sym))))
+
+(defun debug-print (f n ch)
+  (let ((syms (read f)))
+    (list 'debug-warn syms)))
+
+(defun debug-warn-1 (sym)
+  (warn "-> ~A~%" sym)
+    sym)
+
+(defmacro debug-warn (sym)
+  (warn "#?- ~A~%" sym)
+  `(debug-warn-1 ,sym))
+
+(defun enable-debug-reader-macro ()
+  (set-dispatch-macro-character #\# #\? 'debug-print))
