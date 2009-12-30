@@ -1,6 +1,6 @@
 (defsystem chimi
     :version "0.0.1"
-    :depends-on (iterate cl-interpol log5 cl-ppcre alexandria cffi cl-fad
+    :depends-on (iterate log5 cl-ppcre alexandria cffi cl-fad
                  bordeaux-threads)
     :components ((:file "chimi")
                  (:file "io" :depends-on ("chimi"))

@@ -12,8 +12,11 @@
 (in-package :chimi)
 
 ;; cl-interpol
-(cl-interpol:enable-interpol-syntax)
-(alexandria:define-constant +terminal-escape+ #?"\e[" :test #'string=)
+;;(cl-interpol:enable-interpol-syntax)
+;;(alexandria:define-constant +terminal-escape+ #?"\e[" :test #'string=)
+(alexandria:define-constant +terminal-escape+
+    (format nil "~A[" #\Escape)
+  :test #'string=)
 (alexandria:define-constant +terminal-escape-finish-char+ #\m)
 (alexandria:define-constant +terminal-black+ "0;30" :test #'string=)
 (alexandria:define-constant +terminal-red+ "0;31" :test #'string=)

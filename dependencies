@@ -1,3 +1,2 @@
 # clbuild dependencies
-cl-interpol cl-unicode flexi-streams
-chimi iterate cl-interpol log5 cl-ppcre alexandria cffi cl-fad babel bordeaux-threads
+chimi iterate log5 cl-ppcre alexandria cffi cl-fad babel bordeaux-threads
