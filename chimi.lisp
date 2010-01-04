@@ -34,7 +34,7 @@
 	   #:null-output
 	   #:random-select
 	   #:read-from-file
-	   #:list-rank
+	   #:list-rank #:list-rank*
            #:nlet
            #:with-cl-sequence->cffi-array
            #:current-thread

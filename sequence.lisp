@@ -132,6 +132,12 @@
       0
       (1+ (list-rank (car lst)))))
 
+(defun list-rank* (list)
+  (if (atom list)
+      0
+      (max (1+ (list-rank* (car list)))
+           (list-rank* (cdr list)))))
+
 (defun get-keyword (key args)
   "returns 'key' 's value in args.
 
