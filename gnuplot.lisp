@@ -154,7 +154,8 @@
       (iterate:for p in pp)
       (case dimension
 	(2 (format-to-gnuplot *gnuplot* "~A ~A~%" (car p) (cadr p)))
-	(3 (format-to-gnuplot *gnuplot* "~A ~A ~A~%" (car p) (cadr p) (caddr p)))
+	(3 (format-to-gnuplot *gnuplot* "~A ~A ~A~%"
+                              (car p) (cadr p) (caddr p)))
 	(t (error "diemnsion must be 2 or 3.")))
       )
      (format-to-gnuplot *gnuplot* "e~%")

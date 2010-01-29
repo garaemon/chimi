@@ -78,6 +78,3 @@
    "chimi package provides the some utilities
     efficient in common. ")
   )
-
-
-  
