@@ -42,7 +42,15 @@
 (defun pathname->string (pathname)
   (namestring pathname))
 
-;; piped fork
-;;(defun run-program ()
-;;  )
-
+(defun run-program (program-name &key wait)
+  #+sbcl
+  (sb-ext:run-program program-name nil
+                      :input :stream
+                      :output :stream
+                      :wait wait
+                      :search t)
+  #+acl
+  (run-shell-command program-name
+                     :wait wait
+                     :input (or wait :stream)
+                     :output :stream))

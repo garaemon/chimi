@@ -16,18 +16,28 @@
   "the output of all sexp in null-output is redirect to /dev/null.
    "
   ;;*standard-output* *error-outuput*
-  (let ((f (gensym)))
-    `(with-open-file (,f "/dev/null" :direction :output :if-exists :append)
-       (let ((*standard-output* ,f)
-	     (*error-outuput* ,f))
-	 ,@args))))
+  (let ((f (gensym))
+        (standard-output (gensym))
+        (error-output (gensym)))
+    `(let ((,standard-output *standard-output*)
+           (,error-output *error-outuput*))
+       (with-open-file (,f "/dev/null" :direction :output :if-exists :append)
+         (unwind-protect
+              (progn
+                (setq *standard-output* ,f)
+                (setq *error-outuput* ,f)
+                ,@args)
+           (setq *standard-output* ,standard-output)
+           (setq *error-outuput* ,error-output))))))
 
 (defun read-from-file (fname)
   "open a file and call read.
    This Function is efficient in read a file dumped
    lisp object."
-  (with-open-file (f fname :direction :input)
-    (read f)))
+  (let ((ret nil))
+    (with-open-file (f fname :direction :input)
+      (while (push (read f nil nil) ret)))
+    (reverse ret)))
 
 (defun find-file-in-path (fname paths)
   "find fname in paths.
@@ -49,3 +59,4 @@
         (while (setq tmp (read-line f nil nil))
           (write-string tmp str))
         (get-output-stream-string str)))))
+

@@ -36,11 +36,7 @@
   (unless *gnuplot*
     (setf *gnuplot*
 	  (make-instance '<gnuplot>
-			 :stream (sb-ext:run-program path nil
-						     :input :stream
-						     :output :stream
-						     :wait nil
-						     :search t))))
+			 :stream (run-process path :wait nil))))
   (unless *gnuplot*
     (error "Cannot create ~A process" path))
   *gnuplot*)

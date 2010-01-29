@@ -45,7 +45,7 @@
 
 (defun debug-warn-1 (sym)
   (warn "-> ~A~%" sym)
-    sym)
+  sym)
 
 (defmacro debug-warn (sym)
   (warn "#?- ~A~%" sym)

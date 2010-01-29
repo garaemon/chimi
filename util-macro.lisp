@@ -28,6 +28,7 @@
      (,n ,@(mapcar #'cadr letargs))))
 
 (defmacro defun-inline (name args &rest body)
+  ;; defun and declaim as inline function
   `(progn
      (declaim (inline ,name))
      (defun ,name ,args

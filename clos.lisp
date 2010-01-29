@@ -13,8 +13,15 @@
 
 (defmacro defclass* (class-name supers slots &rest args)
   ;;defclass* is a rich wrapper of defclass.
-  ;; defclass* automatically define accessor and initarg.
+  ;;defclass* automatically define accessor and initarg.
+  ;; syntax is
+  ;;(defclass class-name
+  ;;      suport-class-list
+  ;;   (slot-clouses ...)
+  ;; args ...)
+  ;; slot-clouses := (slot-name &optional initial-value &rest slot-args..)
   ;;
+  ;; ex:
   ;; (defclass* <hoge> () ((a 1) (b 2))) -> <hoge>
   ;; (defclass* <fuga> () ((a 100) (B 'piyo))
   ;;     (:documentation .....))
@@ -50,5 +57,5 @@
            (list ,%args)
          ,@body))))
 
-(defun make-instance* (instance &rest args)
-  (apply #'make-instance instance :allow-other-keys t args))
+(defun make-instance* (klass &rest args)
+  (apply #'make-instance klass :allow-other-keys t args))

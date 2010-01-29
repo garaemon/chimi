@@ -27,7 +27,6 @@
                (elt to location)
                target)))))
 
-;; 展開方法が,@的な
 (defun replace-list-flat1 (datum froms tos &key (test #'equal))
   (let ((ret nil))
     (dolist (d datum)
@@ -70,7 +69,6 @@
         ((atom lst)
          (list lst))
         (t                              ;lst = list
-         ;;(declare (type list lst))
          (append (flatten (car lst))
                  (flatten (cdr lst)))
          )))
@@ -128,9 +126,10 @@
    ;;; (list-rank nil) -> 0
    ;;; (list-rank '(1 2 3)) -> 1
    ;;; (list-rank '((1 2 3))) -> 2"
-  (if (atom lst)
+  (if (atom list)
       0
-      (1+ (list-rank (car lst)))))
+      (max (1+ (list-rank* (car list)))
+           (list-rank* (cdr list)))))
 
 (defun list-rank* (list)
   (if (atom list)
@@ -162,5 +161,7 @@
 		    (list (car string-list)))
 		   (t
 		    (append (list (car string-list) space)
-			    (%concatenate-string-with (cdr string-list) space))))))
-    (apply #'concatenate 'string (%concatenate-string-with string-list space))))
+			    (%concatenate-string-with (cdr string-list)
+                                                      space))))))
+    (apply #'concatenate 'string
+           (%concatenate-string-with string-list space))))

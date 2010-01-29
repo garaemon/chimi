@@ -42,7 +42,8 @@
       (when asecond
 	(setf format-str (append format-str (list "~2,'0D")))
 	(setf format-arg (append format-arg (list sec))))
-      (apply #'format nil (concatenate-string-with format-str "-") format-arg))))
+      (apply #'format nil (concatenate-string-with format-str "-")
+             format-arg))))
 
 (defun decompose-time-string (str)
   "Parse a string representing time and
@@ -73,7 +74,7 @@
   "start timer.
    reset timer."
   (multiple-value-bind (dummy sec micro-sec)
-      (sb-unix:unix-gettimeofday)
+      (sb-unix:unix-gettimeofday)       ;how in acl?
     (setf (time-of tm) (cons sec micro-sec)))
   tm)
 
@@ -81,11 +82,10 @@
   "returns time in sec unit.
    this method does not reset timer."
   (multiple-value-bind (dummy sec micro-sec)
-      (sb-unix:unix-gettimeofday)
+      (sb-unix:unix-gettimeofday)       ;how in acl?
     (let ((prev-time (time-of tm)))
       (+ (- sec (car prev-time))
-	 (* 1.0e-6 (- micro-sec (cdr prev-time))))
-      )))
+	 (* 1.0e-6 (- micro-sec (cdr prev-time)))))))
     
 (defclass* <time>
     ()
