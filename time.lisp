@@ -57,7 +57,6 @@
     ;; -> (year month day hour minute second)
     (mapcar #'read-from-string split-result)))
 
-;; sb-unix:unix-gettimeofday returns (sec micro-sec)
 (defclass* <mtimer>
     ()
   ((time nil))
@@ -73,19 +72,14 @@
 (defmethod start-mtimer ((tm <mtimer>))
   "start timer.
    reset timer."
-  (multiple-value-bind (dummy sec micro-sec)
-      (sb-unix:unix-gettimeofday)       ;how in acl?
-    (setf (time-of tm) (cons sec micro-sec)))
+  (setf (time-of tm) (get-internal-real-time))
   tm)
 
 (defmethod stop-mtimer ((tm <mtimer>))
   "returns time in sec unit.
    this method does not reset timer."
-  (multiple-value-bind (dummy sec micro-sec)
-      (sb-unix:unix-gettimeofday)       ;how in acl?
-    (let ((prev-time (time-of tm)))
-      (+ (- sec (car prev-time))
-	 (* 1.0e-6 (- micro-sec (cdr prev-time)))))))
+  (let ((current-time (get-internal-real-time)))
+    (/ (float (- current-time (time-of tm))) internal-time-units-per-second)))
     
 (defclass* <time>
     ()
