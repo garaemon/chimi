@@ -33,15 +33,12 @@
 	       (list x :initform nil
 		     :initarg (symbol->keyword x)
 		     :accessor (string->symbol
-                                (concatenate 'string
-                                             (string x)
-                                             "-of")))
+                                (concatenate 'string (string x) "-of")))
 	       (list (car x) :initform (cadr x)
 		     :initarg (symbol->keyword (car x))
 		     :accessor (string->symbol
                                 (concatenate 'string
-                                             (string (car x))
-                                             "-of")))))
+                                             (string (car x)) "-of")))))
        slots)
      ,@args))
 

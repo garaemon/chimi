@@ -21,26 +21,26 @@
   (current-directory))
 
 (defun ls (&optional (arg (pwd)))
-  (directory arg))
+  (the list (directory arg)))
 
 (defun getenv (str)
   "returns environment variable's value as string.
 
    ;;; (getenv \"HOME\") -> \"/path/to/your/home/directory\""
   #+sbcl
-  (sb-posix:getenv str)
+  (the string (sb-posix:getenv str))
   #+allegro
-  (sys:getenv str))
+  (the string (sys:getenv str)))
 
 (defun cd (&optional (arg (getenv "HOME")))
   #+sbcl
   (sb-posix:chdir arg)
   #+allegro
   (chdir arg)
-  (pwd))                                ;returns current directory
+  (the string (pwd)))                                ;returns current directory
 
 (defun pathname->string (pathname)
-  (namestring pathname))
+  (the string (namestring pathname)))
 
 (defun run-program (program-name &key wait)
   #+sbcl
