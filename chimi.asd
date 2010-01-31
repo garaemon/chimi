@@ -2,7 +2,7 @@
     :version "0.0.2"
     :depends-on (iterate log5 cl-ppcre alexandria cffi bordeaux-threads)
     :components ((:file "chimi")
-                 (:file "io" :depends-on ("chimi"))
+                 (:file "io" :depends-on ("chimi" "util-macro"))
                  (:file "threads" :depends-on ("chimi"))
                  (:file "cffiext" :depends-on ("chimi"))
                  (:file "util-macro" :depends-on ("chimi" "symbol"))

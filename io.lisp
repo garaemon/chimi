@@ -36,7 +36,9 @@
    lisp object."
   (let ((ret nil))
     (with-open-file (f fname :direction :input)
-      (while (push (read f nil nil) ret)))
+      (let ((one-result nil))
+        (while (setq one-result (read f nil nil))
+          (push one-result ret))))
     (reverse ret)))
 
 (defun find-file-in-path (fname paths)

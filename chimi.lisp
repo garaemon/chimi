@@ -18,6 +18,7 @@
    #:definitializer
    #:make-instance*
    ;; gnuplot.lisp
+   #:<gnuplot>
    #:open-gnuplot #:close-gnuplot
    #:plot-function #:plot-points
    #:set-graph-properties
@@ -47,6 +48,7 @@
    #:list-rank #:list-rank*
    #:get-keyword
    #:concatenate-string-with
+   #:assoc-ref
    ;; symbol.lisp
    #:symbol->keyword #:string->symbol
    #:symbol-concatenate
