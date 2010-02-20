@@ -12,7 +12,8 @@
 
 (defpackage :chimi
   (:use #:common-lisp 
-	#+sbcl #:sb-unix)
+	#+sbcl #:sb-unix #+sbcl #:sb-posix)
+        
   (:export ;; clos.lisp
    #:defclass*
    #:definitializer
