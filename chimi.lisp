@@ -17,6 +17,7 @@
    #:defclass*
    #:definitializer
    #:make-instance*
+   #:derivedp
    ;; gnuplot.lisp
    #:<gnuplot>
    #:open-gnuplot #:close-gnuplot

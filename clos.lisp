@@ -56,3 +56,6 @@
 
 (defun make-instance* (klass &rest args)
   (apply #'make-instance klass :allow-other-keys t args))
+
+(defun derivedp (obj type)
+  (subtypep (type-of obj) type))

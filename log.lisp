@@ -95,7 +95,6 @@
 	    (log5::update-category-spec
 	     category-name category-spec))
       ;; make a new log5 sender
-      ;;(dolist (location locations)
       (setf (senders-of ret)
       (iterate:iter
        (iterate:for location in locations)
