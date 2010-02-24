@@ -50,6 +50,7 @@
    #:get-keyword
    #:concatenate-string-with
    #:assoc-ref
+   #:white-spaces-string-p
    ;; symbol.lisp
    #:symbol->keyword #:string->symbol
    #:symbol-concatenate

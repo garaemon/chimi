@@ -168,3 +168,8 @@
 
 (defun assoc-ref (key lst &rest args)
   (cdr (apply #'assoc key lst args)))
+
+(defun white-spaces-string-p (string)
+  (and (stringp string)
+       (= (length (string-trim '(#\Space #\Tab #\Newline) string)) 0)))
+

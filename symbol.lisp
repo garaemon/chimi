@@ -16,7 +16,7 @@
    this function is very slow, because it uses read-from-string.
   ;;; (symbol->keyword 'hoge) -> :hoge"
   (declare (type symbol sym))
-  (read-from-string (concatenate 'string ":" (string sym))))
+  (intern (string sym) :keyword))
 
 (defun string->symbol (str)
   "convert string to symbol.
